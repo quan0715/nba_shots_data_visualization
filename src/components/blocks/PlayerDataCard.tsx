@@ -11,6 +11,7 @@ import TeamLogo from "@/components/blocks/TeamLogo";
 import PlayerImage from "@/components/blocks/PlayerImage";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 type PlayerCardProps = {
   player: PlayerData;
@@ -23,9 +24,13 @@ function PlayerDataCard({ player }: PlayerCardProps) {
         <CardTitle className={"flex flex-row justify-between items-center"}>
           {player.Player}
           <div
-            className={"w-fit flex justify-center items-center p-2 rounded-md"}
+            className={
+              "w-fit flex justify-center items-center px-2 py-1 rounded-xl"
+            }
             style={{
-              backgroundColor: `var(--${player?.Team})`,
+              color: `var(--${player?.Team})`,
+              border: `1px solid var(--${player?.Team})`,
+              // borderColor: `var(--${player?.Team})`,
             }}
           >
             <TeamLogo
@@ -33,45 +38,114 @@ function PlayerDataCard({ player }: PlayerCardProps) {
               height={24}
               teamId={Math.round(player?.team_id ?? 0).toString()}
             />
-            <p className={"text-sm text-white font-semibold font-mono"}>
-              {player?.Team}
-            </p>
+            <p className={"text-sm font-semibold font-mono"}>{player?.Team}</p>
           </div>
         </CardTitle>
         <CardDescription>2024 賽季數據</CardDescription>
       </CardHeader>
-      <CardContent>
-        <PlayerImage
-          playerId={Math.round(player?.player_id ?? 0).toString()}
-          width={300}
-        />
-        {/*<Separator className={"w-full m-2"} />*/}
+      <CardContent className={"flex flex-row justify-center items-center"}>
+        <div className={"w-1/3 flex flex-col justify-center items-center"}>
+          <PlayerImage
+            playerId={Math.round(player?.player_id ?? 0).toString()}
+            width={240}
+          />
+          <div
+            className={
+              "flex-1 flex flex-row justify-evenly space-x-4 items-center p-2"
+            }
+          >
+            <p className={"text-center text-sm font-semibold"}>
+              {"#" + player.Team}
+            </p>
+            <p className={"w-fit text-center text-sm font-semibold"}>
+              {"#" + Math.round(player.Age) + " 歲"}
+            </p>
+            <p className={"text-center text-sm font-semibold"}>
+              {"#" + player.Pos}
+            </p>
+          </div>
+        </div>
         <div
-          className={
-            "w-full flex flex-row justify-evenly space-x-2 items-center p-2"
-          }
+          className={"flex-1 w-full h-full flex-col justify-start items-start "}
         >
-          <div className={"w-1/2"}>
-            <p className={"text-center text-sm font-semibold"}>場均得分</p>
-            <p className={"text-center text-lg font-bold"}>
-              {Math.round((player?.PTS / player?.G) * 100) / 100}
-            </p>
+          <div
+            className={
+              "flex-1 flex flex-row justify-evenly space-x-2 items-center "
+            }
+          >
+            <div className={"flex-1"}>
+              <p className={"text-center text-sm font-semibold"}>場均得分</p>
+              <p className={"text-center text-lg font-bold"}>
+                {Math.round((player?.PTS / player?.G) * 100) / 100}
+              </p>
+            </div>
+            <Separator orientation={"vertical"} className={"h-10"} />
+            <div className={"flex-1"}>
+              <p className={"text-center text-sm font-semibold"}>場均助攻</p>
+              <p className={"text-center text-lg font-bold"}>
+                {Math.round((player?.AST / player?.G) * 100) / 100}
+              </p>
+            </div>
+            <Separator orientation={"vertical"} className={"h-10"} />
+            <div className={"flex-1"}>
+              <p className={"text-center text-sm font-semibold"}>場均籃板</p>
+              <p className={"text-center text-lg font-bold"}>
+                {(Math.round((player?.DRB / player?.G) * 100) +
+                  Math.round((player?.ORB / player?.G) * 100)) /
+                  100}
+              </p>
+            </div>
           </div>
-          <Separator orientation={"vertical"} className={"h-10"} />
-          <div className={"w-1/2"}>
-            <p className={"text-center text-sm font-semibold"}>場均助攻</p>
-            <p className={"text-center text-lg font-bold"}>
-              {Math.round((player?.AST / player?.G) * 100) / 100}
-            </p>
-          </div>
-          <Separator orientation={"vertical"} className={"h-10"} />
-          <div className={"w-1/2"}>
-            <p className={"text-center text-sm font-semibold"}>場均籃板</p>
-            <p className={"text-center text-lg font-bold"}>
-              {(Math.round((player?.DRB / player?.G) * 100) +
-                Math.round((player?.ORB / player?.G) * 100)) /
-                100}
-            </p>
+          <div
+            className={"w-full flex p-4 flex-row justify-center items-center"}
+          >
+            <div
+              className={cn(
+                "flex flex-col justify-center items-center",
+                (Math.round(player.FT) / player?.PTS) * 100 < 1 ? "hidden" : "",
+              )}
+              style={{
+                width: `${(player?.FT / player?.PTS) * 100}%`,
+              }}
+            >
+              <p className={"text-sm font-semibold"}>{Math.round(player.FT)}</p>
+              <div className={"w-full h-2 rounded-full bg-chart-1"} />
+              <p className={"text-[10px] font-semibold"}>罰球</p>
+            </div>
+            <div
+              className={cn(
+                "flex flex-col justify-center items-center",
+                ((Math.round(player.Two_P) * 2) / player?.PTS) * 100 < 1
+                  ? "hidden"
+                  : "",
+              )}
+              style={{
+                width: `${((Math.round(player.Two_P) * 2) / player?.PTS) * 100}%`,
+              }}
+            >
+              <p className={"text-sm font-semibold"}>
+                {Math.round(player.Two_P) * 2}
+              </p>
+              <div className={"w-full h-2 rounded-full bg-chart-2"} />
+              <p className={"text-[10px] font-semibold"}>二分</p>
+            </div>
+            <div
+              className={cn(
+                "flex flex-col justify-center items-center",
+                ((Math.round(player.Three_P) * 3) / player?.PTS) * 100 < 1
+                  ? "hidden"
+                  : "",
+              )}
+              style={{
+                width: `${((Math.round(player.Three_P) * 3) / player?.PTS) * 100}%`,
+              }}
+            >
+              <p className={"text-sm font-semibold"}>
+                {Math.round(player.Three_P) * 3}
+              </p>
+              <div className={"w-full h-2 rounded-full bg-chart-3"} />
+              <p className={"text-[10px] font-semibold"}>三分</p>
+            </div>
           </div>
         </div>
       </CardContent>

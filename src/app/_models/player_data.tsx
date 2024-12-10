@@ -9,7 +9,7 @@ export type PlayerData = {
   FG: number; // 進球
   FGA: number; // 出手
   FG_P: number; // 進球率
-  Three_P: string; // 三分球
+  Three_P: number; // 三分球
   Three_PA: number; // 三分球出手
   Three_P_P: number; // 三分球命中率
   Two_P: number; // 兩分球
