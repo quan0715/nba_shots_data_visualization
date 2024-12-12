@@ -1,16 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+"use client";
 import { PlayerData } from "@/app/_models/player_data";
 import TeamLogo from "@/components/blocks/TeamLogo";
-import PlayerImage from "@/components/blocks/PlayerImage";
 import React from "react";
-import { Separator } from "@/components/ui/separator";
 
 type PlayerCardProps = {
   player: PlayerData;
@@ -18,17 +9,24 @@ type PlayerCardProps = {
 };
 
 function PlayerSelectionEntry({ player, onClick }: PlayerCardProps) {
+  const [isHovered, setIsHovered] = React.useState(false);
+
   return (
     <button
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
       className={
         "w-full flex flex-row items-center justify-between pl-1 text-left text-[11px] font-normal"
       }
       style={{
         // opacity: 0.5,
-        // backgroundColor: `var(--${player?.Team})`,
+        borderRadius: "3px",
+        backgroundColor: isHovered
+          ? `color-mix(in srgb, var(--${player?.Team}) 20%, white)`
+          : ``,
         borderColor: `var(--${player?.Team})`,
-        borderLeft: `2px solid var(--${player?.Team})`,
+        borderLeft: `3px solid var(--${player?.Team})`,
       }}
     >
       {player.Player}

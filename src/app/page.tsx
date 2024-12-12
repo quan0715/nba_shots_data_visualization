@@ -13,7 +13,7 @@ import {
 import PlayerSelectionEntry from "@/components/blocks/PlayerSelectionEntry";
 import { Separator } from "@/components/ui/separator";
 export default function Home() {
-  const csvFile = useCSVFile<PlayerData>("./2024_nba_data.csv");
+  const csvFile = useCSVFile<PlayerData>("./2025_nba_data.csv");
 
   const [player, setPlayer] = useState<PlayerData>();
   useEffect(() => {
