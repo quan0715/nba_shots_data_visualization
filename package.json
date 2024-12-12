@@ -12,6 +12,8 @@
     "react-is": "^19.0.0-rc-69d4b800-20241021"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-scroll-area": "^1.2.1",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@types/papaparse": "^5.3.15",

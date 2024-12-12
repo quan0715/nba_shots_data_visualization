@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/card";
 import PlayerSelectionEntry from "@/components/blocks/PlayerSelectionEntry";
 import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Label } from "@/components/ui/label";
+
 export default function Home() {
   const csvFile = useCSVFile<PlayerData>("./2025_nba_data.csv");
 
@@ -30,25 +33,31 @@ export default function Home() {
             <CardTitle>球員篩選列表</CardTitle>
           </CardHeader>
           <CardContent>
-            <div
-              className={
-                "w-full grid grid-cols-5 max-h-[200px] overflow-auto gap-x-4 gap-y-1"
-              }
-            >
-              {csvFile.csvData.length > 0 &&
-                csvFile.csvData
-                  .filter((player) => player.abbreviation)
-                  .sort((a, b) => a.Team.localeCompare(b.Team))
-                  .map((player, index) => {
-                    return (
-                      <PlayerSelectionEntry
-                        key={player.player_id + index}
-                        player={player}
-                        onClick={() => setPlayer(player)}
-                      />
-                    );
-                  })}
-            </div>
+            {/*<div>*/}
+            {/*  <Label>篩選</Label>*/}
+            {/*</div>*/}
+            <ScrollArea>
+              <div
+                className={
+                  "w-full grid grid-cols-5 max-h-[200px] gap-x-4 gap-y-1"
+                }
+              >
+                {csvFile.csvData.length > 0 &&
+                  csvFile.csvData
+                    .filter((player) => player.abbreviation)
+                    .sort((a, b) => b.FG - a.FG)
+                    .sort((a, b) => a.Team.localeCompare(b.Team))
+                    .map((player, index) => {
+                      return (
+                        <PlayerSelectionEntry
+                          key={player.player_id + index}
+                          player={player}
+                          onClick={() => setPlayer(player)}
+                        />
+                      );
+                    })}
+              </div>
+            </ScrollArea>
           </CardContent>
         </Card>
         <div className={"w-full gap-4 grid grid-cols-1"}>

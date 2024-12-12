@@ -10,7 +10,6 @@
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/blocks/PlayerDataCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/blocks/PlayerDataCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/blocks/PlayerSelectionEntry.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/blocks/PlayerSelectionEntry.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +124,7 @@
       <workItem from="1733806675900" duration="7427000" />
       <workItem from="1733918165471" duration="496000" />
       <workItem from="1733918876270" duration="3342000" />
-      <workItem from="1733986071865" duration="5921000" />
+      <workItem from="1733986071865" duration="8734000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
