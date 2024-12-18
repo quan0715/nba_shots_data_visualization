@@ -4,11 +4,12 @@ import TeamLogo from "@/components/blocks/TeamLogo";
 import React from "react";
 
 type PlayerCardProps = {
+  index: number;
   player: PlayerData;
   onClick: () => void;
 };
 
-function PlayerSelectionEntry({ player, onClick }: PlayerCardProps) {
+function PlayerSelectionEntry({ player, index, onClick }: PlayerCardProps) {
   const [isHovered, setIsHovered] = React.useState(false);
 
   return (
@@ -29,7 +30,7 @@ function PlayerSelectionEntry({ player, onClick }: PlayerCardProps) {
         borderLeft: `3px solid var(--${player?.Team})`,
       }}
     >
-      {player.Player}
+      {index + 1 + " "}.{player.Player}
       <TeamLogo
         width={20}
         height={20}
