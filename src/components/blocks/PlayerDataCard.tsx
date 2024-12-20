@@ -13,10 +13,11 @@ import DonutWithLabel from "@/components/blocks/data_visualization/DonutWithLabe
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import CountUpComponent from "@/components/motion/CountUpAnimationComponent";
 type PlayerCardProps = {
   player: PlayerData;
 };
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const positions = {
   PG: "控球",
   SG: "得分",
@@ -50,8 +51,13 @@ function PlayerDataCard({ player }: PlayerCardProps) {
         </CardTitle>
         <CardDescription>2025 賽季數據</CardDescription>
       </CardHeader>
-      <CardContent className={"flex flex-row justify-center items-center"}>
-        <div className={"w-1/3 flex flex-col justify-center items-center"}>
+      <CardContent
+        className={cn(
+          "flex flex-col justify-start items-center",
+          "md:flex-row md:justify-center md:items-start",
+        )}
+      >
+        <div className={"w-fit flex flex-col justify-center items-center"}>
           <PlayerImage
             playerId={Math.round(player?.player_id ?? 0).toString()}
             width={240}
@@ -103,54 +109,6 @@ function PlayerDataCard({ player }: PlayerCardProps) {
           </div>
           <Separator className={"w-full m-2"} />
 
-          <div
-            className={
-              "w-full flex flex-row justify-evenly space-x-2 items-center"
-            }
-          >
-            <div className={"flex-1"}>
-              <p className={"text-center text-[18px] font-semibold"}>
-                {Math.round((player?.PTS / player?.G) * 100) / 100}
-              </p>
-              <p
-                className={
-                  "text-center text-[12px] font-semibold text-gray-600"
-                }
-              >
-                場均得分
-              </p>
-            </div>
-            <Separator orientation={"vertical"} className={"h-10"} />
-            <div className={"flex-1"}>
-              <p className={"text-center text-[18px] font-semibold"}>
-                {Math.round((player?.AST / player?.G) * 100) / 100}
-              </p>
-              <p
-                className={
-                  "text-center text-[12px] font-semibold text-gray-600"
-                }
-              >
-                場均助攻
-              </p>
-            </div>
-            <Separator orientation={"vertical"} className={"h-10"} />
-            <div className={"flex-1"}>
-              <p className={"text-center text-[18px] font-semibold "}>
-                {(Math.round((player?.DRB / player?.G) * 100) +
-                  Math.round((player?.ORB / player?.G) * 100)) /
-                  100}
-              </p>
-              <p
-                className={
-                  "text-center text-[12px] font-semibold text-gray-600"
-                }
-              >
-                場均籃板
-              </p>
-            </div>
-          </div>
-
-          <Separator className={"w-full m-2"} />
           {/*<div className={"w-full flex flex-row justify-center items-center"}>*/}
           {/*  <div*/}
           {/*    className={cn(*/}
@@ -202,37 +160,151 @@ function PlayerDataCard({ player }: PlayerCardProps) {
           {/*</div>*/}
         </div>
         <div
-          className={"flex-1 w-full h-full flex-col justify-start items-start "}
+          className={
+            "flex-1 w-full h-full flex flex-col justify-start items-start"
+          }
         >
-          <div className={"w-full flex flex-row justify-center items-center"}>
-            <DonutWithLabel
-              label={"罰球"}
-              total={Math.round(player?.FTA)}
-              value={Math.round(player?.FT)}
-              radius={55}
-              color={`var(--${player?.Team})`}
-              className={"w-[200px]"}
-            />
-            <DonutWithLabel
-              label={"兩分球"}
-              total={Math.round(player?.Two_PA)}
-              value={Math.round(player?.Two_P)}
-              radius={55}
-              color={`var(--${player?.Team})`}
-              className={"w-[200px]"}
-            />
-            <DonutWithLabel
-              label={"三分球"}
-              total={Math.round(player?.Three_PA)}
-              value={Math.round(player?.Three_P)}
-              radius={55}
-              color={`var(--${player?.Team})`}
-              className={"w-[200px]"}
-            />
-          </div>
+          <Tabs defaultValue="賽季數據" className="w-full px-4">
+            <TabsList>
+              <TabsTrigger value="賽季數據">賽季數據</TabsTrigger>
+              <TabsTrigger value="投籃表現">投籃表現</TabsTrigger>
+            </TabsList>
+            <TabsContent value="賽季數據">
+              <div
+                className={
+                  "w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 grid-rows-[auto_1fr] gap-x-2.5 gap-y-[1em]"
+                }
+              >
+                <DataCard
+                  title={"場均得分"}
+                  number={Math.round((player?.PTS / player?.G) * 100) / 100}
+                  unit={"Pts"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+                <DataCard
+                  title={"場均籃板"}
+                  number={Math.round((player?.TRB / player?.G) * 100) / 100}
+                  unit={"顆"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+                <DataCard
+                  title={"場均助攻"}
+                  number={Math.max(
+                    0,
+                    Math.round((player?.AST / player?.G) * 100) / 100,
+                  )}
+                  unit={"個"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+                <DataCard
+                  title={"場均抄截"}
+                  number={Math.round((player?.STL / player?.G) * 100) / 100}
+                  unit={"個"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+                <DataCard
+                  title={"場均蓋帽"}
+                  number={Math.round((player?.BLK / player?.G) * 100) / 100}
+                  unit={"個"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+                <DataCard
+                  title={"場均失誤"}
+                  number={Math.round((player?.TOV / player?.G) * 100) / 100}
+                  unit={"個"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+                <DataCard
+                  title={"場均失誤"}
+                  number={Math.round((player?.TOV / player?.G) * 100) / 100}
+                  unit={"個"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+                <DataCard
+                  title={"賽季出場數"}
+                  number={Math.round(player?.G)}
+                  unit={"場"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+                <DataCard
+                  title={"場均出賽時間"}
+                  number={Math.round((player?.MP / player?.G) * 100) / 100}
+                  unit={"分鐘"}
+                  colorStyle={`var(--${player?.Team})`}
+                />
+              </div>
+            </TabsContent>
+            <TabsContent value="投籃表現">
+              <div
+                className={"w-full flex flex-row justify-center items-center"}
+              >
+                <DonutWithLabel
+                  label={"罰球"}
+                  total={Math.round(player?.FTA)}
+                  value={Math.round(player?.FT)}
+                  radius={55}
+                  color={`var(--${player?.Team})`}
+                  className={"w-[200px]"}
+                />
+                <DonutWithLabel
+                  label={"兩分球"}
+                  total={Math.round(player?.Two_PA)}
+                  value={Math.round(player?.Two_P)}
+                  radius={55}
+                  color={`var(--${player?.Team})`}
+                  className={"w-[200px]"}
+                />
+                <DonutWithLabel
+                  label={"三分球"}
+                  total={Math.round(player?.Three_PA)}
+                  value={Math.round(player?.Three_P)}
+                  radius={55}
+                  color={`var(--${player?.Team})`}
+                  className={"w-[200px]"}
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+function DataCard({
+  title,
+  number = -1,
+  unit = "",
+  colorStyle,
+  ...props
+}: {
+  title: string;
+  number: number;
+  unit: string;
+  colorStyle: string;
+} & React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      {...props}
+      className={
+        "w-full flex flex-col justify-start items-start p-4 rounded-md"
+      }
+      style={{
+        border: `1px solid ${colorStyle}`,
+        borderLeft: `4px solid ${colorStyle}`,
+      }}
+    >
+      <p className={"font-mono text-sm "}>{title}</p>
+      <div className={"w-full flex flex-row justify-start items-center"}>
+        {/*<p className={"font-mono text-xl"}>{number}</p>*/}
+        <CountUpComponent
+          className={"font-mono text-xl"}
+          end={number}
+          duration={500}
+        />
+        <p className={"mx-2 font-mono text-sm text-gray-600"}> {unit}</p>
+      </div>
+    </div>
   );
 }
 

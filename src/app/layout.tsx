@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import React from "react";
+import React, { Suspense } from "react";
 import Navbar from "@/components/blocks/app/Navbar";
 
 const geistSans = localFont({
@@ -43,8 +43,10 @@ function Body({
 }>) {
   return (
     <div>
-      <Navbar />
-      {children}
+      <Suspense>
+        <Navbar />
+        {children}
+      </Suspense>
     </div>
   );
 }
