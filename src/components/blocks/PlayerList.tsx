@@ -1,62 +1,39 @@
 "use client";
-import { PlayerData } from "@/app/_models/player_data";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PlayerSeasonData } from "@/app/_models/player_data";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PlayerSelectionEntry from "@/components/blocks/PlayerSelectionEntry";
 
 import SortListComponent from "@/components/blocks/search/SortObject";
 import { usePlayerSearch } from "@/app/_hooks/players/usePlayerSearch";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 function PlayerList() {
   const { getSearchResult } = usePlayerSearch();
-  const searchParams = useSearchParams();
-  const season = searchParams.get("season");
   return (
-    <Card className={"w-full"}>
-      <CardHeader
-        className={"flex flex-row justify-start items-center space-x-2"}
-      >
-        <CardTitle>NBA {`${season}`} 賽季球員列表</CardTitle>
-        <SortListComponent />
-      </CardHeader>
-      <CardContent>
-        <PlayerGallery players={getSearchResult()} />
-      </CardContent>
-    </Card>
+    <div className={"flex flex-col justify-start items-start h-full w-full"}>
+      <SortListComponent />
+      <PlayerGallery players={getSearchResult()} />;
+    </div>
   );
 }
 
-function PlayerGallery({ players }: { players: PlayerData[] }) {
-  const { setTargetPlayer } = usePlayerSearch();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  function handlePlayerClick(player: PlayerData) {
-    setTargetPlayer(player);
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("playerId", Math.round(player.player_id).toString());
-    const newURL = `/?${newParams.toString()}`;
-    router.push(newURL);
-  }
+function PlayerGallery({ players }: { players: PlayerSeasonData[] }) {
   return (
-    <ScrollArea>
-      <div className={"w-full grid grid-cols-5 max-h-[200px] gap-x-4 gap-y-1"}>
-        {players.length > 0 &&
-          players.map((player, index) => {
-            return (
-              <Suspense>
-                <PlayerSelectionEntry
-                  key={player.player_id + index}
-                  index={index}
-                  player={player}
-                  onClick={() => handlePlayerClick(player)}
-                />
-              </Suspense>
-            );
-          })}
-      </div>
+    <ScrollArea
+      className={"w-full flex flex-col justify-start items-start h-[600px]"}
+    >
+      {players.length > 0 &&
+        players.map((player, index) => {
+          return (
+            <Suspense
+              key={`player-${player.player_id}-${index}-${player.team_id}-${player.Player}`}
+            >
+              <div className={"mb-2"}>
+                <PlayerSelectionEntry index={index} player={player} />
+              </div>
+            </Suspense>
+          );
+        })}
     </ScrollArea>
   );
 }

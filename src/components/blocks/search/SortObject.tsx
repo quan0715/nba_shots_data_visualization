@@ -1,8 +1,8 @@
 "use client";
-import { PlayerData } from "@/app/_models/player_data";
+import { PlayerSeasonData } from "@/app/_models/player_data";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { LuKey, LuPlus, LuTable, LuText, LuX } from "react-icons/lu";
+import { LuKey, LuPlus, LuText } from "react-icons/lu";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
@@ -12,9 +12,7 @@ import {
 import { TbNumber } from "react-icons/tb";
 import { cn } from "@/lib/utils";
 import { usePlayerSearch } from "@/app/_hooks/players/usePlayerSearch";
-import DraggableSortActionList, {
-  SortActionEntry,
-} from "@/components/blocks/search/DraggableSortActionList";
+import { SortActionEntry } from "@/components/blocks/search/DraggableSortActionList";
 import { Reorder } from "framer-motion";
 import { BiSort } from "react-icons/bi";
 
@@ -30,9 +28,9 @@ export type SortAction = {
 };
 
 type PlayerListProps = {
-  players: PlayerData[];
+  players: PlayerSeasonData[];
   sortKey: SortKey[];
-  onPlayerClick: (player: PlayerData) => void;
+  onPlayerClick: (player: PlayerSeasonData) => void;
 };
 function SortKeySelectEntry({
   sortKey,
@@ -67,7 +65,7 @@ function SortListComponent() {
   const { sortActions, setSortActions, sortKeyOptions } = usePlayerSearch();
 
   return (
-    <div className={"flex flex-row justify-center items-center m-0 space-y-0"}>
+    <div className={"flex flex-row justify-center items-center"}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -106,7 +104,7 @@ function SortListComponent() {
               {sortActions.map((action, index) => (
                 // <Reorder.Item key={action.key.key} value={action}>
                 <SortActionEntry
-                  key={action.key.key + index}
+                  key={`action-${action.key.key}-${index}`}
                   action={action}
                   index={index}
                 />

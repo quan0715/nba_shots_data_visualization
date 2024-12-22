@@ -1,12 +1,7 @@
 "use client";
 import React, { Suspense } from "react";
 import Link from "next/link";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import {
@@ -18,26 +13,54 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import PlayerImage from "@/components/blocks/PlayerImage";
-import { MenuIcon } from "lucide-react";
+import { usePlayerInfo } from "@/app/_hooks/players/usePlayerInfo";
+import { CgSpinnerAlt } from "react-icons/cg";
+import { Button } from "@/components/ui/button";
+import { FaArrowsRotate } from "react-icons/fa6";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { PlayerSearchContextProvider } from "@/app/_hooks/players/usePlayerSearch";
+import PlayerList from "@/components/blocks/PlayerList";
+
+const defaultPlayerId = "2455";
+const defaultSeason = "2024";
+
 function Navbar() {
+  const links = [
+    // { title: "Team", href: "/team" },
+    // { title: "Compare", href: "/compare" },
+  ];
+  const pathname = usePathname();
+  const isCurrentPath = (path: string) => pathname === path;
   return (
     <nav className={"flex flex-row justify-between border-b-2 border-gray-100"}>
       <Header />
-      <ActionBar
-        links={[
-          // { title: "Player", href: "/" },
-          { title: "Team", href: "/team" },
-          { title: "Compare", href: "/compare" },
-        ]}
-      />
+      <ActionBar>
+        <YearSelectorActionUI />
+        <PlayerHeader />
+        {links.map((link) => (
+          <Link href={link.href} key={link.title}>
+            <div
+              className={cn(
+                "hidden md:flex px-6 py-4 border-l-2 border-l-gray-100 flex-row justify-center items-center hover:bg-gray-100",
+                isCurrentPath(link.href) ? "text-black" : "text-gray-500",
+              )}
+            >
+              {link.title}
+            </div>
+          </Link>
+        ))}
+      </ActionBar>
     </nav>
   );
 }
 
-type LinkProps = {
-  title: string;
-  href: string;
-};
 function Header() {
   return (
     <header
@@ -56,60 +79,93 @@ function Header() {
   );
 }
 
-function ActionBar({ links }: { links: LinkProps[] }) {
-  const pathname = usePathname();
+function PlayerHeader() {
+  const params = useSearchParams();
+  const playerId = params.get("player_id") || defaultPlayerId;
+  const season = params.get("season") || defaultSeason;
+  const { isPlayerLoading, player } = usePlayerInfo(playerId, season);
+  return (
+    <div
+      className={
+        "px-2 h-full flex flex-row justify-center items-center border-l-2 border-l-gray-100"
+      }
+    >
+      {isPlayerLoading ? (
+        <CgSpinnerAlt className={"animate-spin "}></CgSpinnerAlt>
+      ) : (
+        <div
+          className={"flex flex-row w-fit justify-center items-center group"}
+        >
+          <PlayerImage playerId={playerId} width={36} />
+          <p className={"text-sm font-mono"}>{player?.Player}</p>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button size={"icon"} variant={"ghost"}>
+                <FaArrowsRotate
+                  width={36}
+                  className={"group-hover:animate-spin"}
+                />
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>{`${season} 球員列表`}</SheetTitle>
+                <SheetDescription>選擇球員以查看其資料視覺化</SheetDescription>
+                <PlayerSearchContextProvider season={season}>
+                  <PlayerList />
+                </PlayerSearchContextProvider>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function YearSelectorActionUI() {
   const searchParams = useSearchParams();
-  const season = searchParams.get("season");
-  const playerId = searchParams.get("playerId");
   const router = useRouter();
-  // params.append("season", "2425");
-  console.log("params", season);
+  const defaultSeason = "2024";
+  const season = searchParams.get("season") || defaultSeason;
+  const yearOption = [2024, 2023, 2022, 2021, 2020];
+
+  const handleChange = (value: string) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("season", value);
+    router.push(`?${newSearchParams.toString()}`);
+  };
 
   return (
-    <Suspense>
-      <div className={"flex flex-row justify-between items-center"}>
-        <MenuIcon className={"block md:hidden"}></MenuIcon>
-        <Select
-          defaultValue={"24-25"}
-          value={season ?? "24-25"}
-          onValueChange={(value) => {
-            console.log("value", value);
-            const newParams = new URLSearchParams(searchParams);
-            newParams.set("season", value);
-            const newURL = `${pathname}?${newParams.toString()}`;
-            router.push(newURL);
-          }}
-        >
-          <SelectTrigger className="hidden md:block w-fit border-0 m-0 focus:ring-0 h-full rounded-none border-l-2 border-l-gray-100">
-            <Label className={"text-wrap mx-2"}>賽季: </Label>
-            <SelectValue placeholder={"賽季時間"} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={"24-25"}>2024-2025</SelectItem>
-            <SelectItem value={"23-24"}>2023-2024</SelectItem>
-            <SelectItem value={"22-23"}>2022-2023</SelectItem>
-          </SelectContent>
-        </Select>
-        <div
-          className={
-            "hidden md:flex px-6 py-4 flex-row justify-center items-center h-full rounded-none border-l-2 border-l-gray-100"
-          }
-        >
-          {playerId && <PlayerImage playerId={playerId} width={36} />}
-        </div>
-
-        {links.map((link) => (
-          <Link href={link.href} key={link.title}>
-            <div
-              className={cn(
-                "hidden md:flex px-6 py-4 border-l-2 border-l-gray-100 flex-row justify-center items-center hover:bg-gray-100",
-                pathname === link.href ? "text-black" : "text-gray-500",
-              )}
-            >
-              {link.title}
-            </div>
-          </Link>
+    <Select
+      defaultValue={defaultSeason}
+      value={season}
+      onValueChange={handleChange}
+    >
+      <SelectTrigger className="w-fit border-0 m-0 focus:ring-0 h-full rounded-none border-l-2 border-l-gray-100">
+        <Label className={"text-wrap mx-2"}>賽季: </Label>
+        <SelectValue placeholder={"賽季時間"} />
+      </SelectTrigger>
+      <SelectContent>
+        {yearOption.map((year) => (
+          <SelectItem key={year} value={year.toString()}>
+            {`${year - 1} - ${year}`}
+          </SelectItem>
         ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
+function ActionBar({ ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const { children, className, ...rest } = props;
+  return (
+    <Suspense>
+      <div
+        {...rest}
+        className={cn("flex flex-row justify-between items-center", className)}
+      >
+        {children}
       </div>
     </Suspense>
   );

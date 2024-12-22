@@ -1,22 +1,27 @@
 "use client";
-import { PlayerData } from "@/app/_models/player_data";
+import { PlayerSeasonData } from "@/app/_models/player_data";
 import TeamLogo from "@/components/blocks/TeamLogo";
 import React from "react";
+import Link from "next/link";
+import { usePlayerSearch } from "@/app/_hooks/players/usePlayerSearch";
 
 type PlayerCardProps = {
   index: number;
-  player: PlayerData;
-  onClick: () => void;
+  player: PlayerSeasonData;
 };
 
-function PlayerSelectionEntry({ player, index, onClick }: PlayerCardProps) {
+function PlayerSelectionEntry({ player, index }: PlayerCardProps) {
   const [isHovered, setIsHovered] = React.useState(false);
+  const { season, setTargetPlayer } = usePlayerSearch();
 
   return (
-    <button
+    <Link
+      href={`/?season=${season}&player_id=${player.player_id}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick}
+      onClick={() => {
+        setTargetPlayer(player);
+      }}
       className={
         "w-full flex flex-row items-center justify-between pl-1 text-left text-[11px] font-normal"
       }
@@ -31,12 +36,8 @@ function PlayerSelectionEntry({ player, index, onClick }: PlayerCardProps) {
       }}
     >
       {index + 1 + " "}.{player.Player}
-      <TeamLogo
-        width={20}
-        height={20}
-        teamId={Math.round(player?.team_id ?? 0).toString()}
-      />
-    </button>
+      <TeamLogo width={20} height={20} teamId={player.team_id} />
+    </Link>
   );
 }
 

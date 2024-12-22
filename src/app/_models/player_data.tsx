@@ -1,8 +1,8 @@
-export type PlayerData = {
-  Player: string;
-  Age: number;
-  Team: string;
-  Pos: string;
+export type PlayerSeasonData = {
+  Player: string; // 球員名稱
+  Age: number; // 年齡
+  Team: string; // 隊伍
+  Pos: string; // 守備位置
   G: number; // 出賽場數
   GS: number; // 先發場數
   MP: number; // 平均出場時間
@@ -28,19 +28,8 @@ export type PlayerData = {
   TOV: number; // 失誤
   PF: number; // 犯規
   PTS: number; // 得分
-  // PER: number; // Player Efficiency Rating
   Trp_Dbl: number; // 三雙
   Awards: string; // 獎項
-  player_id: number; // 球員編號
-  player_full_name: string; // 球員全名
-  first_name: string; // 名
-  last_name: string; // 姓
-  is_active: boolean; // 是否在職
-  team_id: number; // 隊伍編號
-  team_full_name: string; // 隊伍全名
-  abbreviation: string;
-  nickname: string;
-  city: string;
-  state: string;
-  year_founded: string;
+  player_id: string; // 球員編號
+  team_id: string; // 隊伍編號
 };
