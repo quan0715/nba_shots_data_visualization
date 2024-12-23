@@ -32,4 +32,5 @@ export type PlayerSeasonData = {
   Awards: string; // 獎項
   player_id: string; // 球員編號
   team_id: string; // 隊伍編號
+  YEAR: string; // 年份
 };

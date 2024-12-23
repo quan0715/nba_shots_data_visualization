@@ -17,6 +17,7 @@ type PlayerCardProps = {
   player: PlayerSeasonData;
 };
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PlayerShootingDataChart from "@/components/blocks/shot_data/PlayerShootingDataChart";
 const positions = {
   PG: "控球",
   SG: "得分",
@@ -106,10 +107,11 @@ function PlayerDataCard({ player }: PlayerCardProps) {
             "flex-1 w-full h-full flex flex-col justify-start items-start"
           }
         >
-          <Tabs defaultValue="賽季數據" className="w-full px-4">
+          <Tabs defaultValue="賽季數據" className="w-full px-4 h-fit">
             <TabsList>
               <TabsTrigger value="賽季數據">賽季數據</TabsTrigger>
               <TabsTrigger value="投籃表現">投籃表現</TabsTrigger>
+              <TabsTrigger value={"投藍分布圖"}>投藍分布圖</TabsTrigger>
             </TabsList>
             <TabsContent value="賽季數據">
               <div
@@ -206,159 +208,14 @@ function PlayerDataCard({ player }: PlayerCardProps) {
                 />
               </div>
             </TabsContent>
+            <TabsContent value={"投藍分布圖"}>
+              <PlayerShootingDataChart player={player} />
+            </TabsContent>
           </Tabs>
         </div>
       </CardContent>
     </Card>
   );
-}
-
-{
-  /*<div className={"w-full flex flex-row justify-center items-center"}>*/
-}
-{
-  /*  <div*/
-}
-{
-  /*    className={cn(*/
-}
-{
-  /*      "flex flex-col justify-center items-center",*/
-}
-{
-  /*      (Math.round(player.FT) / player?.PTS) * 100 < 1 ? "hidden" : "",*/
-}
-{
-  /*    )}*/
-}
-{
-  /*    style={{*/
-}
-{
-  /*      width: `${(player?.FT / player?.PTS) * 100}%`,*/
-}
-{
-  /*    }}*/
-}
-{
-  /*  >*/
-}
-{
-  /*    <p className={"text-sm font-semibold"}>{Math.round(player.FT)}</p>*/
-}
-{
-  /*    <div className={"w-full h-2 rounded-full bg-chart-1"} />*/
-}
-{
-  /*    /!*<p className={"text-[10px] font-semibold"}>罰球</p>*!/*/
-}
-{
-  /*  </div>*/
-}
-{
-  /*  <div*/
-}
-{
-  /*    className={cn(*/
-}
-{
-  /*      "flex flex-col justify-center items-center",*/
-}
-{
-  /*      ((Math.round(player.Two_P) * 2) / player?.PTS) * 100 < 1*/
-}
-{
-  /*        ? "hidden"*/
-}
-{
-  /*        : "",*/
-}
-{
-  /*    )}*/
-}
-{
-  /*    style={{*/
-}
-{
-  /*      width: `${((Math.round(player.Two_P) * 2) / player?.PTS) * 100}%`,*/
-}
-{
-  /*    }}*/
-}
-{
-  /*  >*/
-}
-{
-  /*    <p className={"text-sm font-semibold"}>*/
-}
-{
-  /*      {Math.round(player.Two_P) * 2}*/
-}
-{
-  /*    </p>*/
-}
-{
-  /*    <div className={"w-full h-2 rounded-full bg-chart-2"} />*/
-}
-{
-  /*    /!*<p className={"text-[10px] font-semibold"}>二分</p>*!/*/
-}
-{
-  /*  </div>*/
-}
-{
-  /*  <div*/
-}
-{
-  /*    className={cn(*/
-}
-{
-  /*      "flex flex-col justify-center items-center",*/
-}
-{
-  /*      ((Math.round(player.Three_P) * 3) / player?.PTS) * 100 < 1*/
-}
-{
-  /*        ? "hidden"*/
-}
-{
-  /*        : "",*/
-}
-{
-  /*    )}*/
-}
-{
-  /*    style={{*/
-}
-{
-  /*      width: `${((Math.round(player.Three_P) * 3) / player?.PTS) * 100}%`,*/
-}
-{
-  /*    }}*/
-}
-{
-  /*  >*/
-}
-{
-  /*    <p className={"text-sm font-semibold"}>*/
-}
-{
-  /*      {Math.round(player.Three_P) * 3}*/
-}
-{
-  /*    </p>*/
-}
-{
-  /*    <div className={"w-full h-2 rounded-full bg-chart-3"} />*/
-}
-{
-  /*    /!*<p className={"text-[10px] font-semibold"}>三分</p>*!/*/
-}
-{
-  /*  </div>*/
-}
-{
-  /*</div>*/
 }
 
 function DataCard({

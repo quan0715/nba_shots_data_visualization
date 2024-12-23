@@ -32,7 +32,10 @@ const defaultPlayerId = "2455";
 const defaultSeason = "2024";
 
 function Navbar() {
-  const links = [
+  const links: {
+    title: string;
+    href: string;
+  }[] = [
     // { title: "Team", href: "/team" },
     // { title: "Compare", href: "/compare" },
   ];

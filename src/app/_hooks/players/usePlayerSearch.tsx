@@ -46,6 +46,10 @@ export function PlayerSearchContextProvider({
     { key: "Three_P_P", label: "三分進球率", type: "number" },
     { key: "Two_P", label: "兩分進球率", type: "number" },
     { key: "FT_P", label: "罰球進球率", type: "number" },
+    { key: "AST", label: "助攻", type: "number" },
+    { key: "TRB", label: "籃板", type: "number" },
+    { key: "Pos", label: "位置", type: "text" },
+    { key: "MP", label: "平均出場時間", type: "number" },
   ];
 
   const getPlayerList: Promise<PlayerSeasonData[]> = useMemo(async () => {
